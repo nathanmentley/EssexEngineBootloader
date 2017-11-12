@@ -19,7 +19,7 @@
 
 #include <EssexEngineCore/EssexEnvironment.h>
 #include <EssexEngineCore/Context.h>
-#include <EssexEngineCore/UniquePointer.h>
+#include <EssexEngineCore/WeakPointer.h>
 #include <EssexEngineCore/WeakPointer.h>
 
 #include <EssexEngineCore/LogDaemon.h>
@@ -58,31 +58,31 @@ int main(int argc, char **argv)
     
     std::string dataFilename = cwd + "/data.zip";
     
-    EssexEngine::UniquePointer<EssexEngine::Context> context = EssexEngine::UniquePointer<EssexEngine::Context>(new EssexEngine::Context());
-    context->RegisterDriver<EssexEngine::Core::Logging::ILogDriver>(new EssexEngine::Core::Logging::LogDriver(context.GetWeakPointer()));
-    context->RegisterDaemon<EssexEngine::Core::Logging::LogDaemon>(new EssexEngine::Core::Logging::LogDaemon(context.GetWeakPointer()));
+    EssexEngine::WeakPointer<EssexEngine::Context> context = EssexEngine::WeakPointer<EssexEngine::Context>(new EssexEngine::Context());
+    context->RegisterDriver<EssexEngine::Core::Logging::ILogDriver>(new EssexEngine::Core::Logging::LogDriver(context));
+    context->RegisterDaemon<EssexEngine::Core::Logging::LogDaemon>(new EssexEngine::Core::Logging::LogDaemon(context));
 
-    registerDynamicDaemon(context.GetWeakPointer(), "libEssexEngineConfigDaemon.dylib");
-    registerDynamicDaemon(context.GetWeakPointer(), "libEssexEngineSystemDaemon.dylib");
-    registerDynamicDaemon(context.GetWeakPointer(), "libEssexEngineWindowDaemon.dylib");
-    registerDynamicDaemon(context.GetWeakPointer(), "libEssexEngineJsonDaemon.dylib");
-    registerDynamicDaemon(context.GetWeakPointer(), "libEssexEngineFileSystemDaemon.dylib");
-    registerDynamicDaemon(context.GetWeakPointer(), "libEssexEngineGfxDaemon.dylib");
-    registerDynamicDaemon(context.GetWeakPointer(), "libEssexEngineSfxDaemon.dylib");
-    registerDynamicDaemon(context.GetWeakPointer(), "libEssexEngineInputDaemon.dylib");
-    registerDynamicDaemon(context.GetWeakPointer(), "libEssexEngineScriptDaemon.dylib");
+    registerDynamicDaemon(context, "libEssexEngineConfigDaemon.dylib");
+    registerDynamicDaemon(context, "libEssexEngineSystemDaemon.dylib");
+    registerDynamicDaemon(context, "libEssexEngineWindowDaemon.dylib");
+    registerDynamicDaemon(context, "libEssexEngineJsonDaemon.dylib");
+    registerDynamicDaemon(context, "libEssexEngineFileSystemDaemon.dylib");
+    registerDynamicDaemon(context, "libEssexEngineGfxDaemon.dylib");
+    registerDynamicDaemon(context, "libEssexEngineSfxDaemon.dylib");
+    registerDynamicDaemon(context, "libEssexEngineInputDaemon.dylib");
+    registerDynamicDaemon(context, "libEssexEngineScriptDaemon.dylib");
 
-    registerDynamicDriver(context.GetWeakPointer(), "libEssexEngineGTK3Driver.dylib");
-    registerDynamicDriver(context.GetWeakPointer(), "libEssexEngineSDL2Driver.dylib");
-    registerDynamicDriver(context.GetWeakPointer(), "libEssexEngineFileSystemDriver.dylib");
-    registerDynamicDriver(context.GetWeakPointer(), "libEssexEnginePythonDriver.dylib");
-    registerDynamicDriver(context.GetWeakPointer(), "libEssexEngineJsonCppDriver.dylib");
+    registerDynamicDriver(context, "libEssexEngineGTK3Driver.dylib");
+    registerDynamicDriver(context, "libEssexEngineSDL2Driver.dylib");
+    registerDynamicDriver(context, "libEssexEngineFileSystemDriver.dylib");
+    registerDynamicDriver(context, "libEssexEnginePythonDriver.dylib");
+    registerDynamicDriver(context, "libEssexEngineJsonCppDriver.dylib");
 
-    registerDynamicApp(context.GetWeakPointer(), "libEssexEngineAppEditor.dylib");
-    //registerDynamicApp(context.GetWeakPointer(), "libEssexEngineAppServer.dylib");
-    //registerDynamicApp(context.GetWeakPointer(), "libEssexEngineAppGame.dylib");
+    //registerDynamicApp(context, "libEssexEngineAppEditor.dylib");
+    //registerDynamicApp(context, "libEssexEngineAppServer.dylib");
+    registerDynamicApp(context, "libEssexEngineAppGame.dylib");
 
-    enterKernel(context.GetWeakPointer(), "libEssexEngineKernel.dylib", dataFilename);
+    enterKernel(context, "libEssexEngineKernel.dylib", dataFilename);
     
 	return 0;
 }
