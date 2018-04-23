@@ -73,7 +73,9 @@ int main(int argc, char **argv)
     registerDynamicDaemon(context, "libEssexEngineScriptDaemon.dylib");
 
     registerDynamicDriver(context, "libEssexEngineGTK3Driver.dylib");
-    registerDynamicDriver(context, "libEssexEngineSDL2Driver.dylib");
+    registerDynamicDriver(context, "libEssexEngineMacOSDriver.dylib");
+    registerDynamicDriver(context, "libEssexEngineOpenGlDriver.dylib");
+    //registerDynamicDriver(context, "libEssexEngineSDL2Driver.dylib");
     registerDynamicDriver(context, "libEssexEngineFileSystemDriver.dylib");
     registerDynamicDriver(context, "libEssexEnginePythonDriver.dylib");
     registerDynamicDriver(context, "libEssexEngineJsonCppDriver.dylib");
@@ -84,5 +86,5 @@ int main(int argc, char **argv)
 
     enterKernel(context, "libEssexEngineKernel.dylib", dataFilename);
     
-	return 0;
+    return 0;
 }
