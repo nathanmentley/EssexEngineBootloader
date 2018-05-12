@@ -78,11 +78,15 @@ int main(int argc, char **argv)
     registerDynamicDriver(context, "libEssexEnginePythonDriver.dylib");
     registerDynamicDriver(context, "libEssexEngineJsonCppDriver.dylib");
 
-    registerDynamicApp(context, "libEssexEngineAppEditor.dylib");
-    //registerDynamicApp(context, "libEssexEngineAppServer.dylib");
-    //registerDynamicApp(context, "libEssexEngineAppGame.dylib");
-
-    enterKernel(context, "libEssexEngineKernel.dylib", dataFilename);
+    EssexEngine::WeakPointer<EssexEngine::Core::IKernel> kernel = loadKernel(context, "libEssexEngineKernel.dylib", dataFilename);
+    kernel->Start();
     
+    //registerDynamicApp(context, "libEssexEngineAppEditor.dylib");
+    //registerDynamicApp(context, "libEssexEngineAppServer.dylib");
+    //registerDynamicApp(context, "libEssexEngineAppShell.dylib");
+    EssexEngine::WeakPointer<EssexEngine::Core::IApp> app = loadDynamicApp(context, "libEssexEngineAppGame.dylib");
+
+    kernel->RunApp(app);
+
     return 0;
 }

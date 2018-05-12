@@ -48,8 +48,9 @@ void registerDynamicDriver(EssexEngine::WeakPointer<EssexEngine::Context> contex
     (*demo_function)(context);
 }
 
-void registerDynamicApp(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name) {
-    simple_demo_function demo_function;
+typedef EssexEngine::Core::IApp* (*loadDynamicAppFunction)(EssexEngine::WeakPointer<EssexEngine::Context>);
+EssexEngine::WeakPointer<EssexEngine::Core::IApp> loadDynamicApp(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name) {
+    loadDynamicAppFunction appLoadLogic;
     void* library = dlopen(name.c_str(), RTLD_GLOBAL | RTLD_NOW);
 
     if (!library) {
@@ -57,17 +58,19 @@ void registerDynamicApp(EssexEngine::WeakPointer<EssexEngine::Context> context, 
     }
 
     dlerror();
-    demo_function = (simple_demo_function)dlsym(library, "app_init");
+    appLoadLogic = (loadDynamicAppFunction)dlsym(library, "app_init");
     char* error;
     if ((error = dlerror())) {
         fprintf(stderr, "Couldn't find app entry: %s\n", error);
     }
 
-    (*demo_function)(context);
+    EssexEngine::Core::IApp* app = (*appLoadLogic)(context);
+
+    return EssexEngine::WeakPointer<EssexEngine::Core::IApp>(app);
 }
 
-typedef void (*kernel_entry_function)(EssexEngine::WeakPointer<EssexEngine::Context>, std::string dataFile);
-void enterKernel(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name, std::string dataFile) {
+typedef EssexEngine::Core::IKernel* (*kernel_entry_function)(EssexEngine::WeakPointer<EssexEngine::Context>, std::string dataFile);
+EssexEngine::WeakPointer<EssexEngine::Core::IKernel> loadKernel(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name, std::string dataFile) {
     kernel_entry_function kernel_function;
     void* library = dlopen(name.c_str(), RTLD_GLOBAL | RTLD_NOW);
 
@@ -82,5 +85,7 @@ void enterKernel(EssexEngine::WeakPointer<EssexEngine::Context> context, std::st
         fprintf(stderr, "Couldn't find kernel entry: %s\n", error);
     }
 
-    (*kernel_function)(context, dataFile);
+    EssexEngine::Core::IKernel* kernel = (*kernel_function)(context, dataFile);
+
+    return EssexEngine::WeakPointer<EssexEngine::Core::IKernel>(kernel);
 }
