@@ -1,7 +1,7 @@
 /* 
  * Essex Engine
  * 
- * Copyright (C) 2017 Nathan Mentley - All Rights Reserved
+ * Copyright (C) 2018 Nathan Mentley - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the BSD license.
  *
@@ -78,9 +78,9 @@ int main(int argc, char **argv)
     registerDynamicDriver(context, "libEssexEnginePythonDriver.dylib");
     registerDynamicDriver(context, "libEssexEngineJsonCppDriver.dylib");
 
-    //registerDynamicApp(context, "libEssexEngineAppEditor.dylib");
+    registerDynamicApp(context, "libEssexEngineAppEditor.dylib");
     //registerDynamicApp(context, "libEssexEngineAppServer.dylib");
-    registerDynamicApp(context, "libEssexEngineAppGame.dylib");
+    //registerDynamicApp(context, "libEssexEngineAppGame.dylib");
 
     enterKernel(context, "libEssexEngineKernel.dylib", dataFilename);
     
