@@ -61,15 +61,15 @@ int main(int argc, char **argv)
     context->RegisterDriver<EssexEngine::Core::Logging::ILogDriver>(new EssexEngine::Core::Logging::LogDriver(context));
     context->RegisterDaemon<EssexEngine::Core::Logging::LogDaemon>(new EssexEngine::Core::Logging::LogDaemon(context));
 
-    registerDynamicDaemon(context, "libEssexEngineConfigDaemon.dylib");
-    registerDynamicDaemon(context, "libEssexEngineSystemDaemon.dylib");
-    registerDynamicDaemon(context, "libEssexEngineWindowDaemon.dylib");
-    registerDynamicDaemon(context, "libEssexEngineJsonDaemon.dylib");
-    registerDynamicDaemon(context, "libEssexEngineFileSystemDaemon.dylib");
-    registerDynamicDaemon(context, "libEssexEngineGfxDaemon.dylib");
-    registerDynamicDaemon(context, "libEssexEngineSfxDaemon.dylib");
-    registerDynamicDaemon(context, "libEssexEngineInputDaemon.dylib");
-    registerDynamicDaemon(context, "libEssexEngineScriptDaemon.dylib");
+    loadDynamicDaemon(context, "libEssexEngineConfigDaemon.dylib");
+    loadDynamicDaemon(context, "libEssexEngineSystemDaemon.dylib");
+    loadDynamicDaemon(context, "libEssexEngineWindowDaemon.dylib");
+    loadDynamicDaemon(context, "libEssexEngineJsonDaemon.dylib");
+    loadDynamicDaemon(context, "libEssexEngineFileSystemDaemon.dylib");
+    loadDynamicDaemon(context, "libEssexEngineGfxDaemon.dylib");
+    loadDynamicDaemon(context, "libEssexEngineSfxDaemon.dylib");
+    loadDynamicDaemon(context, "libEssexEngineInputDaemon.dylib");
+    loadDynamicDaemon(context, "libEssexEngineScriptDaemon.dylib");
 
     registerDynamicDriver(context, "libEssexEngineGTK3Driver.dylib");
     registerDynamicDriver(context, "libEssexEngineMacOSDriver.dylib");
@@ -79,7 +79,6 @@ int main(int argc, char **argv)
     registerDynamicDriver(context, "libEssexEngineJsonCppDriver.dylib");
 
     EssexEngine::WeakPointer<EssexEngine::Core::IKernel> kernel = loadKernel(context, "libEssexEngineKernel.dylib", dataFilename);
-    kernel->Start();
     
     //registerDynamicApp(context, "libEssexEngineAppEditor.dylib");
     //registerDynamicApp(context, "libEssexEngineAppServer.dylib");
@@ -88,5 +87,7 @@ int main(int argc, char **argv)
 
     kernel->RunApp(app);
 
+    kernel->Start();
+    
     return 0;
 }

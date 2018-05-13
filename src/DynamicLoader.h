@@ -18,7 +18,7 @@
 #include <EssexEngineCore/IApp.h>
 #include <EssexEngineCore/IKernel.h>
 
-void registerDynamicDaemon(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name);
 void registerDynamicDriver(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name);
+EssexEngine::WeakPointer<EssexEngine::Core::IDaemon> loadDynamicDaemon(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name);
 EssexEngine::WeakPointer<EssexEngine::Core::IApp> loadDynamicApp(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name);
 EssexEngine::WeakPointer<EssexEngine::Core::IKernel> loadKernel(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name, std::string dataFile);

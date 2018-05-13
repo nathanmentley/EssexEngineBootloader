@@ -12,24 +12,6 @@
 #include <EssexEngineBootloader/DynamicLoader.h>
 
 typedef void (*simple_demo_function)(EssexEngine::WeakPointer<EssexEngine::Context>);
-void registerDynamicDaemon(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name) {
-    simple_demo_function demo_function;
-    void* library = dlopen(name.c_str(), RTLD_GLOBAL | RTLD_NOW);
-
-    if (!library) {
-        fprintf(stderr, "Couldn't open %s: %s\n", name.c_str(), dlerror());
-    }
-
-    dlerror();
-    demo_function = (simple_demo_function)dlsym(library, "daemon_init");
-    char* error;
-    if ((error = dlerror())) {
-        fprintf(stderr, "Couldn't find daemon entry for %s: %s\n", name.c_str(), error);
-    }
-
-    (*demo_function)(context);
-}
-
 void registerDynamicDriver(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name) {
     simple_demo_function demo_function;
     void* library = dlopen(name.c_str(), RTLD_GLOBAL | RTLD_NOW);
@@ -46,6 +28,27 @@ void registerDynamicDriver(EssexEngine::WeakPointer<EssexEngine::Context> contex
     }
 
     (*demo_function)(context);
+}
+
+typedef EssexEngine::Core::IDaemon* (*loadDynamicDaemonFunction)(EssexEngine::WeakPointer<EssexEngine::Context>);
+EssexEngine::WeakPointer<EssexEngine::Core::IDaemon> loadDynamicDaemon(EssexEngine::WeakPointer<EssexEngine::Context> context, std::string name) {
+    loadDynamicDaemonFunction daemonLoadLogic;
+    void* library = dlopen(name.c_str(), RTLD_GLOBAL | RTLD_NOW);
+
+    if (!library) {
+        fprintf(stderr, "Couldn't open %s: %s\n", name.c_str(), dlerror());
+    }
+
+    dlerror();
+    daemonLoadLogic = (loadDynamicDaemonFunction)dlsym(library, "daemon_init");
+    char* error;
+    if ((error = dlerror())) {
+        fprintf(stderr, "Couldn't find daemon entry for %s: %s\n", name.c_str(), error);
+    }
+
+    EssexEngine::Core::IDaemon* daemon = (*daemonLoadLogic)(context);
+    
+    return EssexEngine::WeakPointer<EssexEngine::Core::IDaemon>(daemon);
 }
 
 typedef EssexEngine::Core::IApp* (*loadDynamicAppFunction)(EssexEngine::WeakPointer<EssexEngine::Context>);
